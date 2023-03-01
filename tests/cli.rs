@@ -1920,7 +1920,7 @@ fn print_body_from_file() {
 #[test]
 fn colored_headers() {
     color_command()
-        .args(["--offline", ":"])
+        .args(["--style=auto", "--offline", ":"])
         .assert()
         .success()
         // Color
@@ -1932,7 +1932,7 @@ fn colored_headers() {
 #[test]
 fn colored_body() {
     color_command()
-        .args(["--offline", ":", "x:=3"])
+        .args(["--style=auto", "--offline", ":", "x:=3"])
         .assert()
         .success()
         .stdout(contains("\x1b[34m3\x1b[0m"));
@@ -1941,6 +1941,7 @@ fn colored_body() {
 #[test]
 fn force_color_pipe() {
     redirecting_command()
+        .arg("--style=auto")
         .arg("--ignore-stdin")
         .arg("--offline")
         .arg("--pretty=colors")

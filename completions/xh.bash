@@ -38,11 +38,11 @@ _xh() {
                     return 0
                     ;;
                 --style)
-                    COMPREPLY=($(compgen -W "auto solarized monokai fruity" -- "${cur}"))
+                    COMPREPLY=($(compgen -W "auto solarized monokai fruity my-color" -- "${cur}"))
                     return 0
                     ;;
                 -s)
-                    COMPREPLY=($(compgen -W "auto solarized monokai fruity" -- "${cur}"))
+                    COMPREPLY=($(compgen -W "auto solarized monokai fruity my-color" -- "${cur}"))
                     return 0
                     ;;
                 --response-charset)

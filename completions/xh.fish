@@ -1,7 +1,7 @@
 complete -c xh -l raw -d 'Pass raw request data without extra processing' -r
 complete -c xh -l pretty -d 'Controls output processing' -r -f -a "{all	'(default) Enable both coloring and formatting',colors	'Apply syntax highlighting to output',format	'Pretty-print json and sort headers',none	'Disable both coloring and formatting'}"
 complete -c xh -l format-options -d 'Set output formatting options' -r
-complete -c xh -s s -l style -d 'Output coloring style' -r -f -a "{auto	'',solarized	'',monokai	'',fruity	''}"
+complete -c xh -s s -l style -d 'Output coloring style' -r -f -a "{auto	'',solarized	'',monokai	'',fruity	'',my-color	''}"
 complete -c xh -l response-charset -d 'Override the response encoding for terminal display purposes' -r
 complete -c xh -l response-mime -d 'Override the response mime type for coloring and formatting for the terminal' -r
 complete -c xh -s p -l print -d 'String specifying what the output should contain' -r
