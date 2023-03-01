@@ -182,7 +182,7 @@ pub fn translate(args: Cli) -> Result<Command> {
         cmd.arg("--key");
         cmd.arg(keyfile);
     }
-    if let Some(Some(tls_version)) = args.ssl {
+    if let Some(tls_version) = args.ssl.and_then(|tls| tls.to_tls_version()) {
         match tls_version {
             tls::Version::TLS_1_0 => {
                 cmd.arg("--tlsv1.0");
@@ -229,7 +229,7 @@ pub fn translate(args: Cli) -> Result<Command> {
     if let Some(http_version) = args.http_version {
         match http_version {
             HttpVersion::Http10 => cmd.arg("--http1.0"),
-            HttpVersion::Http11 => cmd.arg("--http1.1"),
+            HttpVersion::Http11 | HttpVersion::Http1 => cmd.arg("--http1.1"),
             HttpVersion::Http2 => cmd.arg("--http2"),
         }
     }

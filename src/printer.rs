@@ -118,7 +118,7 @@ pub struct Printer {
 
 impl Printer {
     pub fn new(pretty: Pretty, theme: Option<Theme>, stream: bool, buffer: Buffer) -> Self {
-        let theme = theme.unwrap_or(Theme::Auto);
+        let theme = theme.unwrap_or(Theme::MyColor);
 
         Printer {
             indent_json: pretty.format(),

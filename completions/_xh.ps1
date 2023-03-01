@@ -49,9 +49,6 @@ Register-ArgumentCompleter -Native -CommandName 'xh' -ScriptBlock {
             [CompletionResult]::new('--ssl', 'ssl', [CompletionResultType]::ParameterName, 'Force a particular TLS version')
             [CompletionResult]::new('--default-scheme', 'default-scheme', [CompletionResultType]::ParameterName, 'The default scheme to use if not specified in the URL')
             [CompletionResult]::new('--http-version', 'http-version', [CompletionResultType]::ParameterName, 'HTTP version to use')
-            [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help information')
-            [CompletionResult]::new('-V', 'V', [CompletionResultType]::ParameterName, 'Print version information')
-            [CompletionResult]::new('--version', 'version', [CompletionResultType]::ParameterName, 'Print version information')
             [CompletionResult]::new('-j', 'j', [CompletionResultType]::ParameterName, '(default) Serialize data items from the command line as a JSON object')
             [CompletionResult]::new('--json', 'json', [CompletionResultType]::ParameterName, '(default) Serialize data items from the command line as a JSON object')
             [CompletionResult]::new('-f', 'f', [CompletionResultType]::ParameterName, 'Serialize data items from the command line as form fields')
@@ -89,8 +86,7 @@ Register-ArgumentCompleter -Native -CommandName 'xh' -ScriptBlock {
             [CompletionResult]::new('--ignore-stdin', 'ignore-stdin', [CompletionResultType]::ParameterName, 'Do not attempt to read stdin')
             [CompletionResult]::new('--curl', 'curl', [CompletionResultType]::ParameterName, 'Print a translation to a curl command')
             [CompletionResult]::new('--curl-long', 'curl-long', [CompletionResultType]::ParameterName, 'Use the long versions of curl''s flags')
-            [CompletionResult]::new('--no-help', 'no-help', [CompletionResultType]::ParameterName, 'no-help')
-            [CompletionResult]::new('--no-version', 'no-version', [CompletionResultType]::ParameterName, 'no-version')
+            [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--no-json', 'no-json', [CompletionResultType]::ParameterName, 'no-json')
             [CompletionResult]::new('--no-form', 'no-form', [CompletionResultType]::ParameterName, 'no-form')
             [CompletionResult]::new('--no-multipart', 'no-multipart', [CompletionResultType]::ParameterName, 'no-multipart')
@@ -136,6 +132,8 @@ Register-ArgumentCompleter -Native -CommandName 'xh' -ScriptBlock {
             [CompletionResult]::new('--no-ignore-stdin', 'no-ignore-stdin', [CompletionResultType]::ParameterName, 'no-ignore-stdin')
             [CompletionResult]::new('--no-curl', 'no-curl', [CompletionResultType]::ParameterName, 'no-curl')
             [CompletionResult]::new('--no-curl-long', 'no-curl-long', [CompletionResultType]::ParameterName, 'no-curl-long')
+            [CompletionResult]::new('-V', 'V', [CompletionResultType]::ParameterName, 'Print version')
+            [CompletionResult]::new('--version', 'version', [CompletionResultType]::ParameterName, 'Print version')
             break
         }
     })

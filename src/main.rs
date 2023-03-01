@@ -177,7 +177,7 @@ fn run(args: Cli) -> Result<i32> {
         client = client.use_rustls_tls();
     }
 
-    if let Some(Some(tls_version)) = args.ssl {
+    if let Some(tls_version) = args.ssl.and_then(|tls| tls.to_tls_version()) {
         client = client
             .min_tls_version(tls_version)
             .max_tls_version(tls_version);
@@ -370,7 +370,9 @@ fn run(args: Cli) -> Result<i32> {
 
         request_builder = match args.http_version {
             Some(HttpVersion::Http10) => request_builder.version(reqwest::Version::HTTP_10),
-            Some(HttpVersion::Http11) => request_builder.version(reqwest::Version::HTTP_11),
+            Some(HttpVersion::Http11 | HttpVersion::Http1) => {
+                request_builder.version(reqwest::Version::HTTP_11)
+            }
             Some(HttpVersion::Http2) => request_builder.version(reqwest::Version::HTTP_2),
             None => request_builder,
         };

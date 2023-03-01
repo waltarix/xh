@@ -148,8 +148,8 @@ fn basic_json_post() {
         .assert()
         .stdout(indoc! {r#"
             {
-                "got": "name",
-                "status": "ok"
+              "got": "name",
+              "status": "ok"
             }
 
 
@@ -242,9 +242,9 @@ fn json_path_with_escaped_characters() {
         .assert()
         .stdout(indoc! {r#"
             {
-                "f=:;oo[\\": {
-                    "@": "b:::ar"
-                }
+              "f=:;oo[\\": {
+                "@": "b:::ar"
+              }
             }
 
 
@@ -378,7 +378,7 @@ fn verbose() {
             User-Agent: xh/0.0.0 (test mode)
 
             {
-                "x": "y"
+              "x": "y"
             }
 
 
@@ -1469,7 +1469,7 @@ fn formatted_json_output() {
         .assert()
         .stdout(indoc! {r#"
             {
-                "": 0
+              "": 0
             }
 
 
@@ -1489,7 +1489,7 @@ fn inferred_json_output() {
         .assert()
         .stdout(indoc! {r#"
             {
-                "": 0
+              "": 0
             }
 
 
@@ -1509,7 +1509,7 @@ fn inferred_json_javascript_output() {
         .assert()
         .stdout(indoc! {r#"
             {
-                "": 0
+              "": 0
             }
 
 
@@ -1837,7 +1837,7 @@ fn print_body_from_file() {
 #[test]
 fn colored_headers() {
     color_command()
-        .args(["--offline", ":"])
+        .args(["--style=auto", "--offline", ":"])
         .assert()
         .success()
         // Color
@@ -1849,7 +1849,7 @@ fn colored_headers() {
 #[test]
 fn colored_body() {
     color_command()
-        .args(["--offline", ":", "x:=3"])
+        .args(["--style=auto", "--offline", ":", "x:=3"])
         .assert()
         .success()
         .stdout(contains("\x1b[34m3\x1b[0m"));
@@ -1858,6 +1858,7 @@ fn colored_body() {
 #[test]
 fn force_color_pipe() {
     redirecting_command()
+        .arg("--style=auto")
         .arg("--ignore-stdin")
         .arg("--offline")
         .arg("--pretty=colors")
@@ -2865,7 +2866,7 @@ fn override_response_mime() {
         .assert()
         .stdout(indoc! {r#"
         {
-            "status": "ok"
+          "status": "ok"
         }
 
 

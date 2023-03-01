@@ -1,4 +1,4 @@
-.TH XH 1 2023-02-20 0.18.0 "User Commands"
+.TH XH 1 2023-03-08 0.18.0 "User Commands"
 
 .SH NAME
 xh \- Friendly and fast tool for sending HTTP requests
@@ -88,17 +88,7 @@ For more information on this syntax, refer to https://httpie.io/docs/cli/nested\
 .SH OPTIONS
 Each --OPTION can be reset with a --no-OPTION argument.
 .TP 4
-\fB\-j\fR, \fB\-\-json\fR
-(default) Serialize data items from the command line as a JSON object.
-
-Overrides both \-\-form and \-\-multipart.
-.TP 4
-\fB\-f\fR, \fB\-\-form\fR
-Serialize data items from the command line as form fields.
-
-Overrides both \-\-json and \-\-multipart.
-.TP 4
-\fB\-\-multipart\fR
+\fB\-\-multipart\fR=\fIMULTIPART\fR
 Like \-\-form, but force a multipart/form\-data request even without files.
 
 Overrides both \-\-json and \-\-form.
@@ -119,7 +109,7 @@ Defaults to "format" if the NO_COLOR env is set and to "none" if stdout is not t
 \fB\-s\fR, \fB\-\-style\fR=\fITHEME\fR
 Output coloring style.
 
-[possible values: auto, solarized, monokai, fruity]
+[possible values: auto, solarized, monokai, fruity, myColor]
 .TP 4
 \fB\-\-response\-charset\fR=\fIENCODING\fR
 Override the response encoding for terminal display purposes.
@@ -142,16 +132,16 @@ String specifying what the output should contain
 
 Example: \-\-print=Hb.
 .TP 4
-\fB\-h\fR, \fB\-\-headers\fR
+\fB\-h\fR, \fB\-\-headers\fR=\fIHEADERS\fR
 Print only the response headers. Shortcut for \-\-print=h.
 .TP 4
-\fB\-b\fR, \fB\-\-body\fR
+\fB\-b\fR, \fB\-\-body\fR=\fIBODY\fR
 Print only the response body. Shortcut for \-\-print=b.
 .TP 4
-\fB\-m\fR, \fB\-\-meta\fR
+\fB\-m\fR, \fB\-\-meta\fR=\fIMETA\fR
 Print only the response metadata. Shortcut for \-\-print=m.
 .TP 4
-\fB\-v\fR, \fB\-\-verbose\fR
+\fB\-v\fR, \fB\-\-verbose\fR=\fIVERBOSE\fR
 Print the whole request as well as the response.
 
 Additionally, this enables \-\-all for printing intermediary requests/responses while following redirects.
@@ -160,33 +150,33 @@ Using verbose twice i.e. \-vv will print the response metadata as well.
 
 Equivalent to \-\-print=HhBb \-\-all.
 .TP 4
-\fB\-\-all\fR
+\fB\-\-all\fR=\fIALL\fR
 Show any intermediary requests/responses while following redirects with \-\-follow.
 .TP 4
 \fB\-P\fR, \fB\-\-history\-print\fR=\fIFORMAT\fR
 The same as \-\-print but applies only to intermediary requests/responses.
 .TP 4
-\fB\-4\fR, \fB\-\-ipv4\fR
+\fB\-4\fR, \fB\-\-ipv4\fR=\fIIPV4\fR
 Resolve hostname to ipv4 addresses only.
 .TP 4
-\fB\-6\fR, \fB\-\-ipv6\fR
+\fB\-6\fR, \fB\-\-ipv6\fR=\fIIPV6\fR
 Resolve hostname to ipv6 addresses only.
 .TP 4
-\fB\-q\fR, \fB\-\-quiet\fR
+\fB\-q\fR, \fB\-\-quiet\fR=\fIQUIET\fR
 Do not print to stdout or stderr.
 .TP 4
-\fB\-S\fR, \fB\-\-stream\fR
+\fB\-S\fR, \fB\-\-stream\fR=\fISTREAM\fR
 Always stream the response body.
 .TP 4
 \fB\-o\fR, \fB\-\-output\fR=\fIFILE\fR
 Save output to FILE instead of stdout.
 .TP 4
-\fB\-d\fR, \fB\-\-download\fR
+\fB\-d\fR, \fB\-\-download\fR=\fIDOWNLOAD\fR
 Download the body to a file instead of printing it.
 
 The Accept\-Encoding header is set to identify and any redirects will be followed.
 .TP 4
-\fB\-c\fR, \fB\-\-continue\fR
+\fB\-c\fR, \fB\-\-continue\fR=\fIcontinue\fR
 Resume an interrupted download. Requires \-\-download and \-\-output.
 .TP 4
 \fB\-\-session\fR=\fIFILE\fR
@@ -209,20 +199,20 @@ PASS will be prompted if missing. Use a trailing colon (i.e. "USER:") to authent
 
 TOKEN is expected if \-\-auth\-type=bearer.
 .TP 4
-\fB\-\-ignore\-netrc\fR
+\fB\-\-ignore\-netrc\fR=\fIIGNORE_NETRC\fR
 Do not use credentials from .netrc.
 .TP 4
-\fB\-\-offline\fR
+\fB\-\-offline\fR=\fIOFFLINE\fR
 Construct HTTP requests without sending them anywhere.
 .TP 4
-\fB\-\-check\-status\fR
+\fB\-\-check\-status\fR=\fIcheck\-status\fR
 (default) Exit with an error status code if the server replies with an error.
 
 The exit code will be 4 on 4xx (Client Error), 5 on 5xx (Server Error), or 3 on 3xx (Redirect) if \-\-follow isn't set.
 
 If stdout is redirected then a warning is written to stderr.
 .TP 4
-\fB\-F\fR, \fB\-\-follow\fR
+\fB\-F\fR, \fB\-\-follow\fR=\fIFOLLOW\fR
 Do follow redirects.
 .TP 4
 \fB\-\-max\-redirects\fR=\fINUM\fR
@@ -264,39 +254,46 @@ Force a particular TLS version.
 
 "auto" gives the default behavior of negotiating a version with the server.
 
-[possible values: auto, tls1, tls1.1, tls1.2, tls1.3]
+[possible values: auto, ssl23, tls1, tls1.1, tls1.2, tls1.3]
 .TP 4
-\fB\-\-native\-tls\fR
-Use the system TLS library instead of rustls (if enabled at compile time).
-.TP 4
-\fB\-\-https\fR
+\fB\-\-https\fR=\fIHTTPS\fR
 Make HTTPS requests if not specified in the URL.
 .TP 4
 \fB\-\-http\-version\fR=\fIVERSION\fR
 HTTP version to use.
 
-[possible values: 1.0, 1.1, 2]
+[possible values: 1.0, 1.1, 1, 2]
 .TP 4
-\fB\-I\fR, \fB\-\-ignore\-stdin\fR
+\fB\-I\fR, \fB\-\-ignore\-stdin\fR=\fIIGNORE_STDIN\fR
 Do not attempt to read stdin.
 
 This disables the default behaviour of reading the request body from stdin when a redirected input is detected.
 
 It is recommended to pass this flag when using xh for scripting purposes. For more information, refer to https://httpie.io/docs/cli/best\-practices.
 .TP 4
-\fB\-\-curl\fR
+\fB\-\-curl\fR=\fICURL\fR
 Print a translation to a curl command.
 
 For translating the other way, try https://curl2httpie.online/.
 .TP 4
-\fB\-\-curl\-long\fR
+\fB\-\-curl\-long\fR=\fICURL_LONG\fR
 Use the long versions of curl's flags.
 .TP 4
-\fB\-\-help\fR
-Print help information.
+\fB\-\-help\fR=\fIHELP\fR
+Print help.
 .TP 4
 \fB\-V\fR, \fB\-\-version\fR
-Print version information.
+Print version.
+.TP 4
+\fB\-j\fR, \fB\-\-json\fR=\fIJSON\fR
+(default) Serialize data items from the command line as a JSON object.
+
+Overrides both \-\-form and \-\-multipart.
+.TP 4
+\fB\-f\fR, \fB\-\-form\fR=\fIFORM\fR
+Serialize data items from the command line as form fields.
+
+Overrides both \-\-json and \-\-multipart.
 
 .SH EXIT STATUS
 .TP 4
