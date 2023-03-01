@@ -11,7 +11,7 @@ use std::str::FromStr;
 use std::time::Duration;
 
 use anyhow::{anyhow, Context};
-use clap::{self, ArgAction, FromArgMatches, ValueEnum};
+use clap::{ArgAction, CommandFactory, FromArgMatches, Parser, ValueEnum};
 use encoding_rs::Encoding;
 use reqwest::{tls, Method, Url};
 use serde::Deserialize;
@@ -33,41 +33,41 @@ use crate::utils::config_dir;
 ///
 /// It reimplements as much as possible of HTTPie's excellent design, with a focus
 /// on improved performance.
-#[derive(clap::Parser, Debug)]
-#[clap(
+#[derive(Parser, Debug)]
+#[command(
     version,
     long_version = long_version(),
     disable_help_flag = true,
     args_override_self = true
 )]
 pub struct Cli {
-    #[clap(skip)]
+    #[arg(skip)]
     pub httpie_compat_mode: bool,
 
     /// (default) Serialize data items from the command line as a JSON object.
     ///
     /// Overrides both --form and --multipart.
-    #[clap(short = 'j', long, overrides_with_all = &["form", "multipart"])]
+    #[arg(short = 'j', long, overrides_with_all = &["form", "multipart"])]
     pub json: bool,
 
     /// Serialize data items from the command line as form fields.
     ///
     /// Overrides both --json and --multipart.
-    #[clap(short = 'f', long, overrides_with_all = &["json", "multipart"])]
+    #[arg(short = 'f', long, overrides_with_all = &["json", "multipart"])]
     pub form: bool,
 
     /// Like --form, but force a multipart/form-data request even without files.
     ///
     /// Overrides both --json and --form.
-    #[clap(long, conflicts_with = "raw", overrides_with_all = &["json", "form"])]
+    #[arg(long, conflicts_with = "raw", overrides_with_all = &["json", "form"])]
     pub multipart: bool,
 
     /// Pass raw request data without extra processing.
-    #[clap(long, value_name = "RAW")]
+    #[arg(long, value_name = "RAW")]
     pub raw: Option<String>,
 
     /// Controls output processing.
-    #[clap(
+    #[arg(
         long,
         value_enum,
         value_name = "STYLE",
@@ -84,7 +84,7 @@ Defaults to \"format\" if the NO_COLOR env is set and to \"none\" if stdout is n
     pub pretty: Option<Pretty>,
 
     /// Set output formatting options.
-    #[clap(
+    #[arg(
         long,
         value_name = "FORMAT_OPTIONS",
         long_help = "\
@@ -99,23 +99,23 @@ Example: --format-options=json.indent:2,headers.sort:false"
     pub format_options: Vec<FormatOptions>,
 
     /// Output coloring style.
-    #[clap(short = 's', long, value_enum, value_name = "THEME")]
+    #[arg(short = 's', long, value_enum, value_name = "THEME")]
     pub style: Option<Theme>,
 
     /// Override the response encoding for terminal display purposes.
     ///
     /// Example: --response-charset=latin1
-    #[clap(long, value_name = "ENCODING", value_parser = parse_encoding)]
+    #[arg(long, value_name = "ENCODING", value_parser = parse_encoding)]
     pub response_charset: Option<&'static Encoding>,
 
     /// Override the response mime type for coloring and formatting for the terminal.
     ///
     /// Example: --response-mime=application/json
-    #[clap(long, value_name = "MIME_TYPE")]
+    #[arg(long, value_name = "MIME_TYPE")]
     pub response_mime: Option<String>,
 
     /// String specifying what the output should contain
-    #[clap(
+    #[arg(
         short = 'p',
         long,
         value_name = "FORMAT",
@@ -133,15 +133,15 @@ Example: --print=Hb"
     pub print: Option<Print>,
 
     /// Print only the response headers. Shortcut for --print=h.
-    #[clap(short = 'h', long)]
+    #[arg(short = 'h', long)]
     pub headers: bool,
 
     /// Print only the response body. Shortcut for --print=b.
-    #[clap(short = 'b', long)]
+    #[arg(short = 'b', long)]
     pub body: bool,
 
     /// Print only the response metadata. Shortcut for --print=m.
-    #[clap(short = 'm', long)]
+    #[arg(short = 'm', long)]
     pub meta: bool,
 
     /// Print the whole request as well as the response.
@@ -152,37 +152,37 @@ Example: --print=Hb"
     /// Using verbose twice i.e. -vv will print the response metadata as well.
     ///
     /// Equivalent to --print=HhBb --all.
-    #[clap(short = 'v', long, action = ArgAction::Count)]
+    #[arg(short = 'v', long, action = ArgAction::Count)]
     pub verbose: u8,
 
     /// Show any intermediary requests/responses while following redirects with --follow.
-    #[clap(long)]
+    #[arg(long)]
     pub all: bool,
 
     /// The same as --print but applies only to intermediary requests/responses.
-    #[clap(short = 'P', long, value_name = "FORMAT")]
+    #[arg(short = 'P', long, value_name = "FORMAT")]
     pub history_print: Option<Print>,
 
     /// Do not print to stdout or stderr.
-    #[clap(short = 'q', long)]
+    #[arg(short = 'q', long)]
     pub quiet: bool,
 
     /// Always stream the response body.
-    #[clap(short = 'S', long)]
+    #[arg(short = 'S', long)]
     pub stream: bool,
 
     /// Save output to FILE instead of stdout.
-    #[clap(short = 'o', long, value_name = "FILE")]
+    #[arg(short = 'o', long, value_name = "FILE")]
     pub output: Option<PathBuf>,
 
     /// Download the body to a file instead of printing it.
     ///
     /// The Accept-Encoding header is set to identify and any redirects will be followed.
-    #[clap(short = 'd', long)]
+    #[arg(short = 'd', long)]
     pub download: bool,
 
     /// Resume an interrupted download. Requires --download and --output.
-    #[clap(
+    #[arg(
         short = 'c',
         long = "continue",
         name = "continue",
@@ -195,18 +195,18 @@ Example: --print=Hb"
     ///
     /// Within a session, custom headers, auth credentials, as well as any cookies sent
     /// by the server persist between requests.
-    #[clap(long, value_name = "FILE")]
+    #[arg(long, value_name = "FILE")]
     pub session: Option<OsString>,
 
     /// Create or read a session without updating it form the request/response exchange.
-    #[clap(long, value_name = "FILE", conflicts_with = "session")]
+    #[arg(long, value_name = "FILE", conflicts_with = "session")]
     pub session_read_only: Option<OsString>,
 
-    #[clap(skip)]
+    #[arg(skip)]
     pub is_session_read_only: bool,
 
     /// Specify the auth mechanism.
-    #[clap(short = 'A', long, value_enum)]
+    #[arg(short = 'A', long, value_enum)]
     pub auth_type: Option<AuthType>,
 
     /// Authenticate as USER with PASS (-A basic|digest) or with TOKEN (-A bearer).
@@ -215,19 +215,19 @@ Example: --print=Hb"
     /// to authenticate with just a username.
     ///
     /// TOKEN is expected if --auth-type=bearer.
-    #[clap(short = 'a', long, value_name = "USER[:PASS] | TOKEN")]
+    #[arg(short = 'a', long, value_name = "USER[:PASS] | TOKEN")]
     pub auth: Option<String>,
 
     /// Authenticate with a bearer token.
-    #[clap(long, value_name = "TOKEN", hide = true)]
+    #[arg(long, value_name = "TOKEN", hide = true)]
     pub bearer: Option<String>,
 
     /// Do not use credentials from .netrc
-    #[clap(long)]
+    #[arg(long)]
     pub ignore_netrc: bool,
 
     /// Construct HTTP requests without sending them anywhere.
-    #[clap(long)]
+    #[arg(long)]
     pub offline: bool,
 
     /// (default) Exit with an error status code if the server replies with an error.
@@ -236,24 +236,24 @@ Example: --print=Hb"
     /// or 3 on 3xx (Redirect) if --follow isn't set.
     ///
     /// If stdout is redirected then a warning is written to stderr.
-    #[clap(long = "check-status", name = "check-status")]
+    #[arg(long = "check-status", name = "check-status")]
     pub check_status_raw: bool,
 
-    #[clap(skip)]
+    #[arg(skip)]
     pub check_status: Option<bool>,
 
     /// Do follow redirects.
-    #[clap(short = 'F', long)]
+    #[arg(short = 'F', long)]
     pub follow: bool,
 
     /// Number of redirects to follow. Only respected if --follow is used.
-    #[clap(long, value_name = "NUM")]
+    #[arg(long, value_name = "NUM")]
     pub max_redirects: Option<usize>,
 
     /// Connection timeout of the request.
     ///
     /// The default value is "0", i.e., there is no timeout limit.
-    #[clap(long, value_name = "SEC")]
+    #[arg(long, value_name = "SEC")]
     pub timeout: Option<Timeout>,
 
     /// Use a proxy for a protocol. For example: --proxy https:http://proxy.host:8080.
@@ -267,7 +267,7 @@ Example: --print=Hb"
     ///
     /// The environment variables "http_proxy" and "https_proxy" can also be used, but
     /// are completely ignored if --proxy is passed.
-    #[clap(long, value_name = "PROTOCOL:URL", number_of_values = 1)]
+    #[arg(long, value_name = "PROTOCOL:URL", number_of_values = 1)]
     pub proxy: Vec<Proxy>,
 
     /// If "no", skip SSL verification. If a file path, use it as a CA bundle.
@@ -275,40 +275,40 @@ Example: --print=Hb"
     /// Specifying a CA bundle will disable the system's built-in root certificates.
     ///
     /// "false" instead of "no" also works. The default is "yes" ("true").
-    #[clap(long, value_name = "VERIFY", value_parser = VerifyParser)]
+    #[arg(long, value_name = "VERIFY", value_parser = VerifyParser)]
     pub verify: Option<Verify>,
 
     /// Use a client side certificate for SSL.
-    #[clap(long, value_name = "FILE")]
+    #[arg(long, value_name = "FILE")]
     pub cert: Option<PathBuf>,
 
     /// A private key file to use with --cert.
     ///
     /// Only necessary if the private key is not contained in the cert file.
-    #[clap(long, value_name = "FILE")]
+    #[arg(long, value_name = "FILE")]
     pub cert_key: Option<PathBuf>,
 
     /// Force a particular TLS version.
     ///
     /// "auto" gives the default behavior of negotiating a version
     /// with the server.
-    #[clap(long, value_name = "VERSION", value_parser)]
+    #[arg(long, value_name = "VERSION", value_parser)]
     pub ssl: Option<TlsVersion>,
 
     /// Use the system TLS library instead of rustls (if enabled at compile time).
-    #[clap(long, hide = cfg!(not(all(feature = "native-tls", feature = "rustls"))))]
+    #[arg(long, hide = cfg!(not(all(feature = "native-tls", feature = "rustls"))))]
     pub native_tls: bool,
 
     /// The default scheme to use if not specified in the URL.
-    #[clap(long, value_name = "SCHEME", hide = true)]
+    #[arg(long, value_name = "SCHEME", hide = true)]
     pub default_scheme: Option<String>,
 
     /// Make HTTPS requests if not specified in the URL.
-    #[clap(long)]
+    #[arg(long)]
     pub https: bool,
 
     /// HTTP version to use
-    #[clap(long, value_name = "VERSION", value_parser)]
+    #[arg(long, value_name = "VERSION", value_parser)]
     pub http_version: Option<HttpVersion>,
 
     /// Override DNS resolution for specific domain to a custom IP.
@@ -322,15 +322,15 @@ Example: --print=Hb"
     /// Bind to a network interface or local IP address.
     ///
     /// Example: --interface=eth0 --interface=192.168.0.2
-    #[clap(long, value_name = "NAME")]
+    #[arg(long, value_name = "NAME")]
     pub interface: Option<String>,
 
     /// Resolve hostname to ipv4 addresses only.
-    #[clap(short = '4', long)]
+    #[arg(short = '4', long)]
     pub ipv4: bool,
 
     /// Resolve hostname to ipv6 addresses only.
-    #[clap(short = '6', long)]
+    #[arg(short = '6', long)]
     pub ipv6: bool,
 
     /// Do not attempt to read stdin.
@@ -340,21 +340,21 @@ Example: --print=Hb"
     ///
     /// It is recommended to pass this flag when using xh for scripting purposes.
     /// For more information, refer to https://httpie.io/docs/cli/best-practices.
-    #[clap(short = 'I', long)]
+    #[arg(short = 'I', long)]
     pub ignore_stdin: bool,
 
     /// Print a translation to a curl command.
     ///
     /// For translating the other way, try https://curl2httpie.online/.
-    #[clap(long)]
+    #[arg(long)]
     pub curl: bool,
 
     /// Use the long versions of curl's flags.
-    #[clap(long)]
+    #[arg(long)]
     pub curl_long: bool,
 
     /// Print help.
-    #[clap(long, action = ArgAction::HelpShort)]
+    #[arg(long, action = ArgAction::HelpShort)]
     pub help: Option<bool>,
 
     /// The request URL, preceded by an optional HTTP method.
@@ -367,7 +367,7 @@ Example: --print=Hb"
     ///
     /// A leading colon works as shorthand for localhost. ":8000" is equivalent
     /// to "localhost:8000", and ":/path" is equivalent to "localhost/path".
-    #[clap(value_name = "[METHOD] URL")]
+    #[arg(value_name = "[METHOD] URL")]
     raw_method_or_url: String,
 
     /// Optional key-value pairs to be included in the request.
@@ -412,23 +412,23 @@ Example: --print=Hb"
     ///
     /// To construct a complex JSON object, the REQUEST_ITEM's key can be set to a JSON path instead of a field name.
     /// For more information on this syntax, refer to https://httpie.io/docs/cli/nested-json.
-    #[clap(value_name = "REQUEST_ITEM", verbatim_doc_comment)]
+    #[arg(value_name = "REQUEST_ITEM", verbatim_doc_comment)]
     raw_rest_args: Vec<String>,
 
     /// The HTTP method, if supplied.
-    #[clap(skip)]
+    #[arg(skip)]
     pub method: Option<Method>,
 
     /// The request URL.
-    #[clap(skip = ("http://placeholder".parse::<Url>().unwrap()))]
+    #[arg(skip = ("http://placeholder".parse::<Url>().unwrap()))]
     pub url: Url,
 
     /// Optional key-value pairs to be included in the request.
-    #[clap(skip)]
+    #[arg(skip)]
     pub request_items: RequestItems,
 
     /// The name of the binary.
-    #[clap(skip)]
+    #[arg(skip)]
     pub bin_name: String,
 }
 
@@ -581,7 +581,7 @@ impl Cli {
     }
 
     pub fn into_app() -> clap::Command {
-        let app = <Self as clap::CommandFactory>::command();
+        let app = Cli::command();
 
         // Every option should have a --no- variant that makes it as if it was
         // never passed.
@@ -991,11 +991,12 @@ impl FromStr for FormatOptions {
 
 #[derive(Default, ValueEnum, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Theme {
-    #[default]
     Auto,
     Solarized,
     Monokai,
     Fruity,
+    #[default]
+    MyColor,
 }
 
 impl Theme {
@@ -1005,6 +1006,7 @@ impl Theme {
             Theme::Solarized => "solarized",
             Theme::Monokai => "monokai",
             Theme::Fruity => "fruity",
+            Theme::MyColor => "myColor",
         }
     }
 }

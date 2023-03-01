@@ -38,11 +38,11 @@ _xh() {
                     return 0
                     ;;
                 --style)
-                    COMPREPLY=($(compgen -W "auto solarized monokai fruity" -- "${cur}"))
+                    COMPREPLY=($(compgen -W "auto solarized monokai fruity my-color" -- "${cur}"))
                     return 0
                     ;;
                 -s)
-                    COMPREPLY=($(compgen -W "auto solarized monokai fruity" -- "${cur}"))
+                    COMPREPLY=($(compgen -W "auto solarized monokai fruity my-color" -- "${cur}"))
                     return 0
                     ;;
                 --response-charset)
@@ -159,4 +159,4 @@ _xh() {
     esac
 }
 
-complete -F _xh -o bashdefault -o default xh
+complete -F _xh -o nosort -o bashdefault -o default xh
