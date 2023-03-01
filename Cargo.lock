@@ -2349,14 +2349,12 @@ checksum = "a210d160f08b701c8721ba1c726c11662f877ea6b7094007e1ca9a1041945034"
 [[package]]
 name = "unicode-width"
 version = "0.1.14"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7dd6e30e90baa6f72411720665d41d89b9a3d039dc45b8faea1ddd07f617f6af"
+source = "git+https://github.com/waltarix/unicode-width?tag=v0.1.14-custom#78d46d6758ef65310e7f3d25714fbf7be9fed660"
 
 [[package]]
 name = "unicode-width"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fc81956842c57dac11422a97c3b8195a1ff727f06e85c84ed2e8aa277c9a0fd"
+source = "git+https://github.com/waltarix/unicode-width?tag=v0.2.0-custom-r1#218767c448c952bec29a8f1f761157328c3d51c6"
 
 [[package]]
 name = "untrusted"

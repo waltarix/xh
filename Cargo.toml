@@ -128,3 +128,13 @@ xh is a friendly and fast tool for sending HTTP requests.
 It reimplements as much as possible of HTTPie's excellent design, with a focus
 on improved performance.
 """
+
+[profile.release]
+lto = true
+strip = true
+opt-level = 3
+codegen-units = 1
+
+[patch.crates-io]
+unicode-width = { git = "https://github.com/waltarix/unicode-width", tag = "v0.2.0-custom-r1" }
+unicode-width1 = { package = "unicode-width", git = "https://github.com/waltarix/unicode-width", tag = "v0.1.14-custom" }

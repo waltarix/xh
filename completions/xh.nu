@@ -5,7 +5,7 @@ module completions {
   }
 
   def "nu-complete xh style" [] {
-    [ "auto" "solarized" "monokai" "fruity" ]
+    [ "auto" "solarized" "monokai" "fruity" "my-color" ]
   }
 
   def "nu-complete xh auth_type" [] {
