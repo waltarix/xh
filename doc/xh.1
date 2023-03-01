@@ -1,4 +1,4 @@
-.TH XH 1 2025-05-02 0.24.1 "User Commands"
+.TH XH 1 2025-05-17 0.24.1 "User Commands"
 
 .SH NAME
 xh \- Friendly and fast tool for sending HTTP requests
@@ -128,7 +128,7 @@ Example: \-\-format\-options=json.indent:2,headers.sort:false.
 \fB\-s\fR, \fB\-\-style\fR=\fITHEME\fR
 Output coloring style.
 
-[possible values: auto, solarized, monokai, fruity]
+[possible values: auto, solarized, monokai, fruity, my\-color]
 .TP 4
 \fB\-\-response\-charset\fR=\fIENCODING\fR
 Override the response encoding for terminal display purposes.
@@ -284,9 +284,6 @@ Force a particular TLS version.
 "auto" gives the default behavior of negotiating a version with the server.
 
 [possible values: auto, tls1, tls1.1, tls1.2, tls1.3]
-.TP 4
-\fB\-\-native\-tls\fR
-Use the system TLS library instead of rustls (if enabled at compile time).
 .TP 4
 \fB\-\-https\fR
 Make HTTPS requests if not specified in the URL.

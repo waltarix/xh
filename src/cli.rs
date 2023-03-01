@@ -890,11 +890,12 @@ impl FromStr for FormatOptions {
 
 #[derive(Default, ValueEnum, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Theme {
-    #[default]
     Auto,
     Solarized,
     Monokai,
     Fruity,
+    #[default]
+    MyColor,
 }
 
 impl Theme {
@@ -904,6 +905,7 @@ impl Theme {
             Theme::Solarized => "solarized",
             Theme::Monokai => "monokai",
             Theme::Fruity => "fruity",
+            Theme::MyColor => "myColor",
         }
     }
 

@@ -21,8 +21,8 @@ colors\:"Apply syntax highlighting to output"
 format\:"Pretty-print json and sort headers"
 none\:"Disable both coloring and formatting"))' \
 '*--format-options=[Set output formatting options]:FORMAT_OPTIONS:_default' \
-'-s+[Output coloring style]:THEME:(auto solarized monokai fruity)' \
-'--style=[Output coloring style]:THEME:(auto solarized monokai fruity)' \
+'-s+[Output coloring style]:THEME:(auto solarized monokai fruity my-color)' \
+'--style=[Output coloring style]:THEME:(auto solarized monokai fruity my-color)' \
 '--response-charset=[Override the response encoding for terminal display purposes]:ENCODING:_default' \
 '--response-mime=[Override the response mime type for coloring and formatting for the terminal]:MIME_TYPE:_default' \
 '-p+[String specifying what the output should contain]:FORMAT:_default' \
