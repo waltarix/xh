@@ -107,7 +107,7 @@ Each `--OPTION` can be reset with a `--no-OPTION` argument.
 
 - `-s`, `--style=THEME`: Output coloring style.
 
-  [possible values: `auto`, `solarized`, `monokai`, `fruity`]
+  [possible values: `auto`, `solarized`, `monokai`, `fruity`, `my-color`]
 
 - `--response-charset=ENCODING`: Override the response encoding for terminal display purposes.
   
